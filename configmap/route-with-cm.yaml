@@ -1,0 +1,12 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: httpd-service-with-cm
+spec:
+  host: httpd-service-with-cm-junk.apps-crc.testing
+  port:
+    targetPort: http
+  to:
+    kind: Service
+    name: httpd-service-with-cm
+  wildcardPolicy: None

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myhttpd-pod
+spec:
+  containers:
+    - name: http-container
+      image: registry.redhat.io/rhel8/python-38:latest
+      resources:
+        limits:
+          cpu: "250m"
+          memory: "100Mi"
+      command:
+        - bash
+      args:
+        - -c
+        - cp /proc/sys/kernel/hostname hostname;python -m http.server 8080
+  restartPolicy: Never
