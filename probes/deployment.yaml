@@ -32,7 +32,14 @@ items:
               path: /readiness
               port: 8080
             initialDelaySeconds: 3
-            periodSeconds: 3
+            periodSeconds: 
+        - name: ubi
+          image: registry.access.redhat.com/ubi8/ubi
+          imagePullPolicy: Always
+          command:
+          - sleep
+          args:
+            - infinity
   - kind: Service
     apiVersion: v1
     metadata:

@@ -16,8 +16,14 @@ podman push ${REGISTRY}/${PROJECT}/server:1
 ```
 
 # Create the Deployment
-```
+```bash
 sed "s/__PROJECT__/${PROJECT}/" deployment.yaml | oc create -f -
+```
+
+# Check the Logs
+```bash
+oc logs - httpserver -c httpserver
+
 ```
 # Access the Application
 curl $(oc get route httpserver -o jsonpath='{.spec.host}')/

@@ -66,9 +66,11 @@ func toggleReadiness(w http.ResponseWriter, r *http.Request) {
 	if ready {
 		readinessResponse = http.StatusServiceUnavailable
 		livenessResponse = http.StatusServiceUnavailable
+		ready = false
 	} else {
 		readinessResponse = http.StatusOK
 		livenessResponse = http.StatusOK
+		ready = true
 	}
 	w.WriteHeader(http.StatusOK)
 	log.Println("toggleReadiness returned: ", http.StatusOK)
