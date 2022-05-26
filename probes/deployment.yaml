@@ -1,0 +1,57 @@
+---
+apiVersion: v1
+kind: List
+items:
+  - apiVersion: v1
+    kind: Pod
+    metadata:
+      name: httpserver
+      labels:
+        app: httpserver
+    spec:
+      containers:
+        - name: httpserver
+          image: image-registry.openshift-image-registry.svc:5000/__PROJECT__/server:1
+          imagePullPolicy: Always
+          startupProbe:
+            httpGet:
+              path: /startup
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 3
+            failureThreshold: 5
+          livenessProbe:
+            httpGet:
+              path: /liveness
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 3
+            failureThreshold: 15
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 3
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      name: httpserver
+    spec:
+      ports:
+        - name: http
+          port: 8080
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        app: httpserver
+  - apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      name: httpserver
+    spec:
+      port:
+        targetPort: http
+      to:
+        kind: Service
+        name: httpserver
