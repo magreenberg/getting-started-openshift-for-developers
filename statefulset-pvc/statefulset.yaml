@@ -1,0 +1,38 @@
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: sample-ss
+spec:
+  selector:
+    matchLabels:
+      app: sample-ss
+  serviceName: sample-ss-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sample-ss
+    spec:
+      containers:
+        - name: main
+          image: busybox
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SLEEP_TIME
+              value: "15"
+          command:
+            - sh
+            - -c
+            - |2-
+              echo "Application started successfully"
+              while [ true ];do
+                echo $(date +%H:%M:%S) $(hostname) >> /path/in/pod/events.log
+                sleep ${SLEEP_TIME}
+              done
+          volumeMounts:
+            - mountPath: /path/in/pod
+              name: sharedvolume
+      volumes:
+        - name: sharedvolume
+          persistentVolumeClaim:
+            claimName: shareddata
