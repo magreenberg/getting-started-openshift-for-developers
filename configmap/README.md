@@ -4,7 +4,7 @@ oc create configmap httpconfig --from-file=config.properties=develop.properties
 ```
 # Start the Application
 ```bash
-deployment-with-cm.yaml  route-with-cm.yaml  server-with-cm.yaml
+oc create -f deployment-with-cm.yaml -f route-with-cm.yaml -f service-with-cm.yaml
 ```
 
 # Test the Mount
